@@ -1,0 +1,128 @@
+% -------------------------------------------
+% -- ECN 301 HW Set 0                      --
+% -------------------------------------------
+
+\documentclass[a4paper,10pt]{lec_nmbu}
+\usepackage[utf8]{inputenc}
+\usepackage[american]{babel}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{pgfpages}
+
+\normalfont
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+
+\usepackage{courier}
+\usepackage[scaled]{helvet}
+\usepackage[sc,osf]{mathpazo}
+\usepackage[charter]{mathdesign}
+
+\linespread{1.05}
+
+
+% -- definer overskrifter
+\leccode{ECN 301}
+\title{Econometric Methods}
+\lectype{Computer Lab Task \#07}
+\lecdate{Spring Term 2022}
+\author{Olvar Bergland}
+
+% define Fancyheaders
+\pagestyle{fancy}
+\addtolength{\headwidth}{\marginparsep}
+\addtolength{\headwidth}{\marginparwidth}
+\addtolength{\headheight}{4pt}
+\lhead{\bfseries{ECN 301}}
+\chead{\bfseries{Computer Lab \#07}}
+\rhead{\bfseries\thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+
+\begin{document}
+
+\maketitle
+
+
+The study by \citet{ODO06EST} uses a dataset consisting of information collected
+from 44 smallholder rice producers in the Tarlac region of the Philippines
+between 1990 and 1997\footnote{This is panel data. However, here we will treat it as a
+random sample. I will revisit this dataset later in the course.}. The dataset is
+also used in the textbooks by \citet{COE05INT} and \citet{HIL18PRI} to
+illustrate estimation of production and cost functions. The dataset, called
+\texttt{rice2}, includes these variables:
+
+\begin{footnotesize}
+\begin{verbatim}
+-------------------------------------------------------
+Contains data from rice2.csv
+-------------------------------------------------------
+Philippines Rice Data, IRRI
+10 Oct 2013 11:04
+-------------------------------------------------------
+  obs:           352
+ vars:             6
+-------------------------------------------------------
+variable name   variable label
+-------------------------------------------------------
+farmid          Farm ID
+year            Year
+prod            Rice production (tonnes)
+area            Area planted to rice (hectares)
+labor           Labor (man-days of hired + family)
+fert            Fertilizer applied (kilograms)
+-------------------------------------------------------
+Sorted by:  farmid  year
+-------------------------------------------------------
+\end{verbatim}
+\end{footnotesize}
+
+Consider the following Cobb-Douglas production function specification:
+\begin{equation}
+   \ln q_{it} = \alpha + \sum_{j=1}^{3} \beta_j \ln x_{jit} + \varepsilon_{it}
+   \quad i=1,\ldots,N \ t?=1.\ldots,T.
+   \label{fn:cd}
+\end{equation}
+where $\alpha$ represents the constant term and$\varepsilon_{it}$ is the idiosyncratic error term.
+The output level (\texttt{prod}) is $q_{it}$, and the level of the factors of production are denoted
+$x_{jit}$ for factor $j$ for farmer $i$ in year $t$. The three factors of
+production are land (\texttt{area}), \texttt{labor} and fertilizer (\texttt{fert}).
+The number of observations is $NT$.
+
+\begin{enumerate}
+   \item Verify the number entities (farmers) and the number of time periods.
+
+   \item Create dummy variables for the years. Perform the estimation of the POLS (see below) both
+         using explicit dummy variables and with year as a category variable.
+
+   \item The key task here is to use a variety of estimators for this data:
+         \begin{enumerate}
+          \item POLS
+          \item FE
+          \item RE
+          \item CRE
+         \end{enumerate}
+
+         And then provide a good argued answer to:
+         \begin{enumerate}
+          \item are there unobserved individual effects
+          \item are there year specific effects
+          \item which estimator is valid/preferred and why
+         \end{enumerate}
+
+   \item Finally, is there constant returns-to-scale in rice farming?
+
+\end{enumerate}
+
+\bibliographystyle{econometrica}
+\bibliography{refbase}
+
+\end{document}
+\endinput
+

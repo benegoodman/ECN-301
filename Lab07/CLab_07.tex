@@ -1,0 +1,367 @@
+% --------------------------------------------------------------------
+% -- ECN 301 Computer Lab #01                                       --
+% --     Olvar Bergland, 2014 NMBU Total revision                   --
+% --------------------------------------------------------------------
+
+\documentclass[aspectratio=169,t]{beamer}
+%\documentclass[draft]{beamer}
+%\documentclass[handout,t]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{pgfpages}
+
+\usepackage{bm}
+\usepackage{eulervm}
+\usepackage[default]{lato}
+
+\usepackage{hyperref}
+\hypersetup{%
+   colorlinks  = {true},
+   urlcolor    = {blue},
+   linkcolor   = {black},
+   citecolor   = {black},
+   pdfauthor   = {Olvar Bergland},
+   pdftitle    = {ECN301: Econometric Methods},
+   pdfkeywords = {BibTeX, LaTeX}
+}
+
+\usetheme{Boadilla}
+\usecolortheme[RGB={0,154,129}]{structure} % NMBU official color code
+\usefonttheme{professionalfonts}
+\setbeamerfont{note page}{family*=pplx}
+\setbeamertemplate{note page}[plain]
+\addtobeamertemplate{note page}{\setlength{\parskip}{12pt}}
+
+%
+% options for presentation mode only
+\mode<beamer>{
+  \setbeamercovered{transparent}
+  \hypersetup{pdfpagemode={FullScreen},%
+              bookmarksopen,%
+              bookmarksopenlevel=1}
+  \setbeameroption{hide notes}
+}
+
+%
+% options for printed handouts (with my notes!)
+\mode<handout>{
+  \usepackage{handoutWithNotes}
+  \pgfpagesuselayout{4 on 1 with notes}[a4paper,border shrink=5mm]
+  \pgfpageslogicalpageoptions{1}{border code=\pgfusepath{stroke}}
+  \pgfpageslogicalpageoptions{2}{border code=\pgfusepath{stroke}}
+  \pgfpageslogicalpageoptions{3}{border code=\pgfusepath{stroke}}
+  \pgfpageslogicalpageoptions{4}{border code=\pgfusepath{stroke}}
+  \setbeameroption{show notes}
+}
+
+
+\pgfdeclareimage[height=10mm]{nmbu-logo}{../../picts/NMBU_symbol_RGB}
+\logo{\pgfuseimage{nmbu-logo}}
+
+
+% ----------------------------------------------------------
+% --  Lecture identifications                             --
+% ----------------------------------------------------------
+
+\title[ECN 301: Computer Lab 07] %
+      {ECN 301: Computer Lab \# 07\\
+       Introduction to Python and Scripting}
+
+\author{Olvar Bergland}
+
+
+\institute[NMBU] %
+  {
+  School of Economics and Business\\
+  Norwegian University of Life Sciences (NMBU) \\
+  and \\
+  School of Economic Sciences\\
+  Washington State University (WSU)
+  }
+
+
+\date{January 2022}
+
+
+\begin{document}
+
+\begin{frame}
+ \titlepage
+\end{frame}
+
+%\section*{Outline}
+
+\begin{frame}
+  \frametitle{Preparation}
+
+  Before this computer lab:
+  \begin{itemize}
+   \item Install Python on your computer
+   \item Look at the first five sections in ``Learning Python the Hard Way'' (oops, no longer freely available)
+   \item Look at the first chapter in ``Using Python for Introductory Econometrics'' (\url{http://www.upfie.net/})
+   \item Look at automate the boring stuff \url{https://automatetheboringstuff.com/}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Python Distributions}
+
+  Python is freely available, and provided by (among others):
+  \begin{itemize}
+   \item anaconda
+   \item Microsoft
+   \item Linux (depend on distribution)
+   \item Apple
+  \end{itemize}
+
+  Many prefer anaconda irrespective of operating system
+
+  (\url{https://www.anaconda.com/products/individual})
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Python Tools}
+
+  Python development tools:
+  \begin{itemize}
+   \item IDE (integrated development environment)
+     \begin{itemize}
+      \item Visual Studio Code (Microsoft)
+      \item PyCharm (\url{https://www.jetbrains.com/pycharm/})
+      \item Spyder (\url{https://www.spyder-ide.org/})
+      \item Jupyter Notebook (not really IDE)
+     \end{itemize}
+   \item editor
+     \begin{itemize}
+      \item Notepad++
+      \item Atom (\url{https://atom.io/})
+     \end{itemize}
+  \end{itemize}
+
+  Many prefer anaconda irrespective of operating system
+
+  (\url{https://www.anaconda.com/products/individual})
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Python Environment}
+
+  Python lives in part on the command line:
+  \begin{itemize}
+   \item Anaconda includes a power shell
+   \item Windows also has a power shell
+   \item this is old news in Linux
+   \item create at least one environment
+     \begin{itemize}
+      \item insulates and specializes Python
+      \item (\url{https://hackmd.io/u06NnoS9RrCE6Yp8aj9BpQ})
+     \end{itemize}
+  \end{itemize}
+
+
+F. Vella and M. Verbeek (1998), "Whose Wages Do Unions Raise? A Dynamic Model
+of Unionism and Wage Rate Determination for Young Men," Journal of Applied
+Econometrics 13, 163-183.
+
+nr                       person identifier
+year                     1980 to 1987
+black                    =1 if black
+exper                    labor market experience
+hisp                     =1 if Hispanic
+hours                    annual hours worked
+married                  =1 if married
+educ                     years of schooling
+union                    =1 if in union
+lwage                    log(wage)
+expersq                  exper^2
+occupation               Occupation code
+
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Python Requirements}
+
+  The tools we will be using: Python 3.6+ and the science stack:
+  \begin{enumerate}
+   \item numpy
+   \item pandas
+   \item matplotlib
+   \item scipy
+   \item statsmodels
+  \end{enumerate}
+  as well as \texttt{linearmodels}.
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Python Tools}
+
+  Why the different Python packages:
+  \begin{enumerate}
+   \item data management: pandas
+   \item creating graphs: matplotlib (and SeaBorn)
+   \item statistical tools: scipy and statsmodels
+   \item computation: numpy
+   \item econometric models: statsmodels and linearmodels
+   \item machine learning: scikit-learn
+  \end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Writing Scripts}
+
+   \begin{itemize}
+    \item We will start with writing \emph{sripts} -- a list of commands
+    \item Use a command window and a text editor
+    \item Don't use a fancy interface
+    \item Exceptions (sometimes):
+      \begin{itemize}
+       \item IPython
+       \item Jupyter notebooks
+      \end{itemize}
+   \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Silly script \# 1}
+
+  \begin{itemize}
+   \item The famous ``hello world'' program
+     \begin{verbatim}
+        print('Hello world')
+     \end{verbatim}
+   \item Save this in a text file called \texttt{hello.py}.
+   \item At command prompt issue \texttt{python hello.py}:
+     \begin{verbatim}
+(vp3) [olvar@thinkpad code]$ python hello.py
+Hello world
+(vp3) [olvar@thinkpad code]$
+     \end{verbatim}
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Silly script \#2}
+
+  Another silly example
+  \begin{verbatim}
+import datetime
+print('Today is: {}'.format(datetime.datetime.today())
+  \end{verbatim}
+
+  At command prompt issue \texttt{python today.py}:
+     \begin{verbatim}
+(vp3) [olvar@thinkpad code]$ python hello.py
+Today is: 2021-02-30 14:25:08
+(vp3) [olvar@thinkpad code]$
+     \end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Reading datafiles (CSV-files)}
+
+  \begin{enumerate}
+   \item Reading datafiles are a pain, but ...
+   \item Pandas has a nice smart automagical interface to csv-files
+   \item Reads numbers, strings and dates
+   \item Only write Python code for reading raw files if everything else fails!
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]
+ \frametitle{Structure of CSV-files}
+
+ A typical CSV file may look like this:
+ \begin{verbatim}
+hid,total,food
+1,835.94,561.08
+2,876.04,617.24
+3,951.47,591.24
+ \end{verbatim}
+
+ This fits with default Pandas style:
+\begin{verbatim}
+import pandas as pd
+engel = pd.read_csv("./belgium.csv")
+\end{verbatim}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+ \frametitle{Structure of CSV-files}
+
+ This fits with default Pandas style:
+\begin{verbatim}
+engel.head()
+\end{verbatim}
+
+This tells us:
+\begin{verbatim}
+ <class 'pandas.core.frame.DataFrame'>
+RangeIndex: 198 entries, 0 to 197
+Data columns (total 3 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   hid     198 non-null    int64
+ 1   total   198 non-null    float64
+ 2   food    198 non-null    float64
+dtypes: float64(2), int64(1)
+memory usage: 4.8 KB
+\end{verbatim}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+ \frametitle{Structure of CSV-files}
+
+ The variable \texttt{hid} is a unique identifier - index
+\begin{verbatim}
+engel = engel.set_index(['hid'])
+engel.head()
+\end{verbatim}
+
+This tells us:
+\begin{verbatim}
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 198 entries, 1 to 198
+Data columns (total 2 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   total   198 non-null    float64
+ 1   food    198 non-null    float64
+dtypes: float64(2)
+memory usage: 4.6 KB
+\end{verbatim}
+
+\end{frame}
+
+
+\end{document}
+\endinput
+
