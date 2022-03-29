@@ -42,6 +42,8 @@ airf = airf.set_index(['id','period'])
 #
 print(airf[['year','lfare','concen']].head())
 
+#%%
+
 #
 # want dummy variables for the periods
 #   - either create new variables
@@ -54,6 +56,13 @@ print(airf[['year','lfare','concen']].head())
 ydummies = pd.get_dummies(airf['year'],prefix='yd',drop_first=True)
 airf = pd.concat([airf,ydummies], axis=1)
 print(airf.info())
+
+#%%
+
+
+"""
+Example to show that we need to use clustered standard errors for pooled OLS estimation
+"""
 
 #
 # pooled model, OLS estimation w/ dummy variables
@@ -73,6 +82,7 @@ ftest = por.f_test(yhyp)
 print('Testing year effect in POLS')
 print('F-stat : {}'.format(ftest.statistic[0][0]))
 print('p-value: {}'.format(ftest.pvalue))
+
 
 
 #
@@ -97,9 +107,20 @@ print('Testing year effect in POLS')
 print('F-stat : {}'.format(ftest.statistic[0][0]))
 print('p-value: {}'.format(ftest.pvalue))
 
+"""
+Conclusion: Time plays a significant part in estimation. 
+"""
 
 
+#%%
 #
+
+
+"""
+Olvar uses pooled OLS to test for time varying, and individual effects - this is why we do these
+"""
+
+
 # POLS w/cluster robust standard errors
 #
 pom = plm.PooledOLS.from_formula(formula='lfare ~ 1 + concen + ldist + ldistsq + C(year)',
@@ -116,6 +137,16 @@ print('Testing year effect in POLS')
 print('Chi2   : {}'.format(wtest.stat))
 print('p-value: {}'.format(wtest.pval))
 
+"""
+Conclusion: use clustered standard errors for panel data when doing pooled OLS
+
+"""
+
+#%%
+
+"""
+lrhat = individual effects ...or rather all effects not accounted for by variables otherwise controlled for
+"""
 
 #
 # preliminary test for unobserved effects
@@ -135,6 +166,17 @@ print('Chi2   : {}'.format(wtest.stat))
 print('p-value: {}'.format(wtest.pval))
 
 
+
+#%%
+
+"""
+First diff: normally used in short panels (few time periods)
+if T < 3 if yields the same estimators as FE estimators
+
+Ben lambert has a video on it here: https://www.youtube.com/watch?v=G7WqK2o474Y
+
+"""
+
 #
 # first difference estimator
 #
@@ -143,6 +185,12 @@ fdm = plm.FirstDifferenceOLS.from_formula(formula='lfare ~ concen',
 fdr = fdm.fit(cov_type='clustered', cluster_entity=True)
 print(fdr)
 
+"""
+Yields biased results
+"""
+
+#%%
+
 #
 # add year dummy variables
 fdm = plm.FirstDifferenceOLS.from_formula(formula='lfare ~ concen + yd_1999 + yd_2000',
@@ -150,6 +198,14 @@ fdm = plm.FirstDifferenceOLS.from_formula(formula='lfare ~ concen + yd_1999 + yd
 fdr = fdm.fit(cov_type='clustered', cluster_entity=True)
 print(fdr)
 
+
+#%%
+
+"""
+Note: EntityEffects need to be included, im at a loss at what it truly does. If you want 
+the whole truth about it, ask Olvar. Short story: include it for technical reasons.
+
+"""
 
 #
 # fixed effects estimator
@@ -161,6 +217,9 @@ fer = fem.fit(cov_type='clustered', cluster_entity=True)
 print(fer)
 
 
+
+#%%
+
 #
 # random effects estimator
 #
@@ -170,6 +229,7 @@ rem = plm.RandomEffects.from_formula(
 rer = rem.fit(cov_type='clustered', cluster_entity=True)
 print(rer)
 
+#%%
 
 #
 # the tricky part with CRE is to create the
@@ -195,6 +255,12 @@ print(airf[['id','year','concen','concen_b']])
 # set a proper index
 airf = airf.set_index(['id','period'])
 
+#%%
+
+"""
+Note: a CRE estimator is basically the same as an RE estimator, but with average variables across entities
+
+"""
 
 #
 # correlated random effects estimator
@@ -205,6 +271,7 @@ crm = plm.RandomEffects.from_formula(
 crr = crm.fit(cov_type='clustered', cluster_entity=True)
 print(crr)
 
+#%%
 
 #
 # comparing results
@@ -214,3 +281,13 @@ print(plm.panel.compare({'POLS': por,
                          'RE'  : rer,
                          'CRE' : crr},
                         precision='std_errors'))
+
+"""
+Conclusion:
+    RE is inconsistent (i.e. time effects play a large part)
+    We also see that coefficients are the same for FE and CRE models
+        Means that differences between entities are not a source of systemic differences in outcome
+    However, average concentration variable for CRE is significant 
+    Hence, CRE model is correct (the intercept is off in RE, despite being more efficient)
+    Had concen_b not been significant we would have gone with RE
+"""
